@@ -1,5 +1,5 @@
-import { Component, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Component, signal } from '@angular/core'
+import { RouterOutlet } from '@angular/router'
 import { Header } from './shared/header/header'
 
 @Component({
@@ -9,5 +9,5 @@ import { Header } from './shared/header/header'
   templateUrl: './app.html',
 })
 export class App {
-  protected readonly title = signal('frontend-angular');
+  protected readonly title = signal('frontend-angular')
 }

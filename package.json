@@ -5,7 +5,7 @@
   "private": true,
   "author": "asaromi",
   "scripts": {
-    "start:frontend": "yarn workspace frontend-angular start --port=3000",
+    "start:frontend": "yarn workspace frontend-angular start",
     "start:api": "yarn workspace api-nest start",
     "start": "yarn start:frontend & yarn start:api"
   },

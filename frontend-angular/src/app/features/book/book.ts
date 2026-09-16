@@ -9,7 +9,9 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { BookService } from '../../core/services/book.service';
 import { Book as BookModel, CreateBookDto, UpdateBookDto } from '../../core/models/book.model';
 import { BookFormDialogComponent } from './components/book-form-dialog.component';
-import { ConfirmDialogComponent } from '../client/components/confirm-dialog.component';
+import { BookPreviewDialogComponent } from './components/book-preview-dialog.component';
+import { ClientConfirmDialogComponent } from '../client/components/client-confirm-dialog.component';
+import { BookConfirmDialogComponent } from './components/book-confirm-dialog.component'
 
 @Component({
   selector: 'app-book',
@@ -38,6 +40,7 @@ import { ConfirmDialogComponent } from '../client/components/confirm-dialog.comp
 export class Book implements OnInit {
   displayedColumns: string[] = ['judul', 'penulis', 'tahunTerbit', 'isbn', 'stok', 'kategori', 'actions'];
   dataSource = new MatTableDataSource<BookModel>([]);
+  bookDetail: BookModel = {} as BookModel;
 
   constructor(
     private bookService: BookService,
@@ -69,7 +72,7 @@ export class Book implements OnInit {
     });
   }
 
-  edit = (book: BookModel) => {
+  onEdit = (book: BookModel) => {
     const dialogRef = this.dialog.open(BookFormDialogComponent, {
       width: '500px',
       data: { book }
@@ -84,8 +87,38 @@ export class Book implements OnInit {
     });
   }
 
-  delete = (book: BookModel) => {
-    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+  onPreview = (book: BookModel) => {
+    // fetch detailed book from backend then open preview dialog
+    this.bookService.getBook(book.id).subscribe((res) => {
+      this.dialog.open(BookPreviewDialogComponent, {
+        width: '480px',
+        data: res,
+      });
+    });
+  }
+
+  onRent = (book: BookModel) => {
+    const dialogRef = this.dialog.open(BookConfirmDialogComponent, {
+      width: '400px',
+      data: {
+        title: 'Borrow Book',
+        message: `Are you sure you want to borrow "${book.judul}"?`,
+        confirmLabel: 'Borrow',
+        type: 'primary',
+      }
+    });
+
+    dialogRef.afterClosed().subscribe((confirmed: boolean) => {
+      if (confirmed) {
+        this.bookService.borrowBook(book.id, 1).subscribe(() => {
+          this.loadBooks();
+        });
+      }
+    });
+  }
+
+  onDelete = (book: BookModel) => {
+    const dialogRef = this.dialog.open(BookConfirmDialogComponent, {
       width: '400px',
       data: {
         title: 'Delete Book',

@@ -58,4 +58,10 @@ export class BookService {
       map(response => response.data)
     );
   }
+
+  borrowBook(id: string, qty = 1): Observable<Book> {
+    return this.http.post<any>(`${this.apiUrl}/${id}/borrow`, { qty }).pipe(
+      map(response => response.data)
+    );
+  }
 }
