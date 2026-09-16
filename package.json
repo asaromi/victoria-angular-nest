@@ -1,0 +1,14 @@
+{
+  "name": "angular-nest-monorepo",
+  "version": "1.0.0",
+  "description": "",
+  "private": true,
+  "author": "asaromi",
+  "scripts": {
+    "start:frontend": "yarn workspace frontend-angular start --port=3000",
+    "start:api": "yarn workspace api-nest start",
+    "start": "yarn start:frontend & yarn start:api"
+  },
+  "license": "ISC",
+  "workspaces": ["frontend-angular", "api-nest"]
+}

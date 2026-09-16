@@ -1,0 +1,24 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Book {
+  id         String        @id @default(uuid()) @db.Uuid
+  judul String   @db.VarChar(150)
+  penulis String   @db.VarChar(64)
+  penerbit String?   @db.VarChar(128)
+  tahunTerbit Int          @map("tahun_terbit")
+  isbn String @unique @db.VarChar(128)
+  stok Int
+  kategori String? @db.VarChar(32)
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt DateTime? @updatedAt @map("updated_at") @db.Timestamptz
+
+  @@map("books")
+}

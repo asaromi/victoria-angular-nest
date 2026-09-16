@@ -1,0 +1,245 @@
+# License & Book Management System
+
+This project is an implemented License and Book Management System using NestJS (Node.js) and Angular, with PostgreSQL as the database and Prisma as the ORM.
+The project is designed to manage clients, books, products, and licenses with a RESTful API and a modern web interface.
+
+## Tech Stack
+
+- **Backend:** NestJS 12 (TypeScript)
+- **Frontend:** Angular 19 (Material UI, Tailwind CSS)
+- **Database:** PostgreSQL
+- **ORM:** Prisma 6
+
+## Project Structure
+
+```
+api-nest/
+├── src/
+│   ├── books/          # Book module (CRUD, Search, Borrow logic)
+│   ├── client/         # Client module
+│   ├── product/        # Product module
+│   ├── product-plan/   # Product Plan module
+│   ├── license/        # License module
+│   └── common/         # Shared filters, DTOs, and Prisma service
+├── prisma/             # Schema and migrations
+└── test/               # E2E tests (not used yet)
+frontend-angular/
+├── src/app/
+│   ├── features/       # Feature modules (Book, Client, etc.)
+│   ├── core/           # Core services and models
+│   └── shared/         # Shared components (Header, etc.)
+```
+
+## Project Limitation
+
+- This is a simplified management system and does **not** include full authentication or authorization logic.
+- API responses follow a consistent format using `ApiResponseDto` and `ApiPaginationResponseDto`.
+- Validation is still basic and coverage manually on the service layer.
+- The current book module does not include unit tests.
+
+## Requirements
+
+### Assumption
+
+#### Book Module
+- Validation:
+    - `judul`: required, max length 150
+    - `penulis`: required, max length 64
+    - `tahunTerbit`: required, not in the future
+    - `isbn`: required, unique
+    - `stok`: required, minimum 0
+- Searchable by `judul` and `kategori` via query parameters.
+
+## Technical Requirement
+- Defined Models (Prisma):
+    - `Book`
+- API Endpoints
+    - Books: `GET /api/books`, `POST /api/books`, `PUT /api/books/:id`, `DELETE /api/books/:id`, `POST /api/books/:id/borrow`
+
+### Sample API Endpoints (Books)
+
+#### 1. Get All Books (with Pagination & Search)
+- **URL:** `GET /api/books?page=1&limit=10&judul=Clean+Code`
+- **Response:**
+```json
+{
+  "success": true,
+  "data": [
+    {
+      "id": "550e8400-e29b-41d4-a716-446655440000",
+      "judul": "Clean Code",
+      "penulis": "Robert C. Martin",
+      "tahunTerbit": 2008,
+      "isbn": "978-0132350884",
+      "stok": 10,
+      "kategori": "Programming",
+      "createdAt": "2026-09-16T13:11:00.000Z",
+      "updatedAt": "2026-09-16T13:11:00.000Z"
+    }
+  ],
+  "meta": {
+    "limit": 10,
+    "page": 1,
+    "totalData": 1
+  },
+  "statusCode": 200,
+  "message": "Books successfully retrieved"
+}
+```
+
+#### 2. Create Book
+- **URL:** `POST /api/books`
+- **Request Body:**
+```json
+{
+  "judul": "The Pragmatic Programmer",
+  "penulis": "Andrew Hunt, David Thomas",
+  "tahunTerbit": 1999,
+  "isbn": "978-0201616224",
+  "stok": 5,
+  "kategori": "Software Engineering"
+}
+```
+- **Response:**
+```json
+{
+  "success": true,
+  "data": {
+    "id": "6ba7b810-9dad-11d1-80b4-00c04fd430c8",
+    "judul": "The Pragmatic Programmer",
+    "penulis": "Andrew Hunt, David Thomas",
+    "tahunTerbit": 1999,
+    "isbn": "978-0201616224",
+    "stok": 5,
+    "kategori": "Software Engineering",
+    "createdAt": "2026-09-16T13:12:00.000Z",
+    "updatedAt": "2026-09-16T13:12:00.000Z"
+  },
+  "statusCode": 201,
+  "message": "Book successfully created"
+}
+```
+
+#### 3. Update Book
+- **URL:** `PUT /api/books/:id`
+- **Request Body:**
+```json
+{
+  "stok": 15
+}
+```
+- **Response:**
+```json
+{
+  "success": true,
+  "data": {
+    "id": "550e8400-e29b-41d4-a716-446655440000",
+    "judul": "Clean Code",
+    "penulis": "Robert C. Martin",
+    "tahunTerbit": 2008,
+    "isbn": "978-0132350884",
+    "stok": 15,
+    "kategori": "Programming",
+    "createdAt": "2026-09-16T13:11:00.000Z",
+    "updatedAt": "2026-09-16T13:13:00.000Z"
+  },
+  "statusCode": 200,
+  "message": "Book with id 550e8400-e29b-41d4-a716-446655440000 successfully updated"
+}
+```
+
+#### 4. Borrow Book
+- **URL:** `POST /api/books/:id/borrow`
+- **Request Body:**
+```json
+{
+  "qty": 2
+}
+```
+- **Response:**
+```json
+{
+  "success": true,
+  "data": {
+    "id": "550e8400-e29b-41d4-a716-446655440000",
+    "stok": 13,
+    ...
+  },
+  "statusCode": 200,
+  "message": "Book with id 550e8400-e29b-41d4-a716-446655440000 successfully borrowed"
+}
+```
+
+#### 5. Delete Book
+- **URL:** `DELETE /api/books/:id`
+- **Response:**
+```json
+{
+  "success": true,
+  "statusCode": 200,
+  "message": "Book with id 550e8400-e29b-41d4-a716-446655440000 successfully deleted"
+}
+```
+
+#### 6. Error Responses (Validation & Business Logic)
+
+##### **400 Bad Request (Validation Error)**
+- **Scenario:** Missing required fields, negative stock, or future year of publication.
+- **Response:**
+```json
+{
+  "statusCode": 400,
+  "message": [
+    "Stok must be positive",
+    "Tahun terbit cannot be in the future"
+  ],
+  "error": "Bad Request"
+}
+```
+
+##### **404 Not Found (Book doesn't exist)**
+- **Scenario:** Accessing or updating a book that doesn't exist.
+- **Response:**
+```json
+{
+  "statusCode": 404,
+  "message": "Book not found",
+  "error": "Not Found"
+}
+```
+
+##### **409 Conflict (Duplicate ISBN)**
+- **Scenario:** Creating or updating a book with an ISBN that already exists in the database.
+- **Response:**
+```json
+{
+  "statusCode": 409,
+  "message": "ISBN already exists",
+  "error": "Conflict"
+}
+```
+
+## Setup & Installation
+
+### Setup Requirement
+
+- Node.js >= 22
+- PostgreSQL service running
+- Prisma CLI
+
+### Backend Setup (api-nest)
+
+1. Navigate to `api-nest` directory.
+2. Install dependencies: `npm install`
+3. Copy `.env.example` to `.env` and update `DATABASE_URL`.
+4. Run migrations/sync database: `npx prisma db push`
+5. Generate Prisma Client: `npx prisma generate`
+6. Start the server: `npm run start:dev`
+
+### Frontend Setup (frontend-angular)
+
+1. Navigate to `frontend-angular` directory.
+2. Install dependencies: `npm install`
+3. Start the development server: `npm run start`
+4. Access the app at `http://localhost:4200` (Backend runs on `http://localhost:8000`).
+

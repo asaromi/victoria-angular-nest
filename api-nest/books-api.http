@@ -1,0 +1,48 @@
+### Create new book
+POST http://localhost:8000/api/books
+Content-Type: application/json
+
+{
+  "judul": "Clean Code 101",
+  "penulis": "Robert C. Martin",
+  "penerbit": "Prentice Hall",
+  "tahunTerbit": 2008,
+  "isbn": "978-0132350999",
+  "stok": 10,
+  "kategori": "Programming"
+}
+
+### GET list of books
+GET http://localhost:8000/api/books
+    ?judul=
+    &kategori=
+    &page=2
+    &limit=1
+
+### GET detail of book by ID
+GET http://localhost:8000/api/books/107b75c7-2396-447f-ba2c-dfc9b7410ac6
+
+### UPDATE book by ID
+PUT http://localhost:8000/api/books/78e7142c-56ff-4549-8046-4bc6a9989710
+Content-Type: application/json
+
+{
+  "judul": "Clean Code 100",
+  "penulis": "Robert C. Martin",
+  "penerbit": "Prentice Hall",
+  "tahunTerbit": 2008,
+  "isbn": "978-01323508100",
+  "stok": 10,
+  "kategori": "Programming 001"
+}
+
+### DELETE book by ID
+DELETE http://localhost:8000/api/books/78e7142c-56ff-4549-8046-4bc6a99897a5
+
+### Borrow book by ID
+POST http://localhost:8000/api/books/107b75c7-2396-447f-ba2c-dfc9b7410ac6/borrow
+Content-Type: application/json
+
+{
+  "qty": 1
+}
