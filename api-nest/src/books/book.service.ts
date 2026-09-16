@@ -46,7 +46,7 @@ export class BookService {
 
 	async createBook(reqBody: RequestBookDto) {
 		this.validateBook(reqBody)
-		await this.checkBookAndIsbn(reqBody.isbn)
+		await this.checkBookIsbn(reqBody.isbn)
 
 		return await this.prisma.book.create({ data: reqBody })
 	}
@@ -68,7 +68,7 @@ export class BookService {
 		const promises = [this.checkBookExists(id)]
 
 		if (reqBody.isbn) {
-			promises.push(this.checkBookAndIsbn(reqBody.isbn, id))
+			promises.push(this.checkBookIsbn(reqBody.isbn, id))
 		}
 
 		await Promise.all(promises)
@@ -98,13 +98,13 @@ export class BookService {
 		const existBook = await this.prisma.book.count({ where: { id, ...additionalClause } })
 
 		if (Object.keys(additionalClause).length > 0 && existBook < 1) {
-			throw new HttpException(`Book for ${JSON.stringify(additionalClause)} was not found`, HttpStatus.NOT_FOUND)
+			throw new HttpException(`Book for id: ${id} was not found`, HttpStatus.NOT_FOUND)
 		} else if (existBook < 1) {
 			throw new HttpException('Book not found', HttpStatus.NOT_FOUND)
 		}
 	}
 
-	private async checkBookAndIsbn(isbn: string, id?: string) {
+	private async checkBookIsbn(isbn: string, id?: string) {
 		const additionalClause = !!id ? { id: { not: id } } : {}
 
 		const existsIsbn = await this.prisma.book.count({

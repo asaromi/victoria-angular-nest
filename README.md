@@ -225,13 +225,14 @@ shared/
 - Node.js >= 22
 - PostgreSQL service running
 - Prisma CLI
+- Yarn package manager (recommend)
 
 ### Backend Setup (api-nest)
 1. Navigate to `api-nest` directory.
-2. Install dependencies: `npm --dev`
+2. Install dependencies: `yarn --dev`
 3. Copy `.env.example` to `.env` and update `DATABASE_URL`.
-4. Run migrations/sync database: `npx prisma db push`
-5. Generate Prisma Client: `npx prisma generate`
+4. Run migrations/sync database: `yarn prisma db push`
+5. Generate Prisma Client: `yarn prisma generate`
 6. Start the server: `yarn start:dev`
 7. Default backend runs on `http://localhost:8000`.
 
@@ -239,11 +240,14 @@ shared/
 1. Navigate to `frontend-angular` directory.
 2. Install dependencies: `yarn --dev`
 3. Start the development server: `yarn start`
-4. Access the app at `http://localhost:3000` (Backend runs on `http://localhost:8000`).
+4. You can update your port on `package.json > scripts > start` if needed.
+5. You can update backend port on `src/environments/environment.ts` if needed.
+6. Access the app at `http://localhost:3000` (Backend runs on `http://localhost:8000`).
 
 ### Directly run both Frontend and Backend
 1. Navigate to the root directory of the project.
-2. Run `yarn --dev` to install all package both `frontend-angular` and `api-nest`
-3. Run both servers concurrently: `yarn start`
-4. Access the frontend at `http://localhost:3000` and backend at `http://localhost:8000`.
+2. Don't forget to update any port or database source like the steps above
+3. Run `yarn --dev` to install all package both `frontend-angular` and `api-nest`
+4. Run both servers concurrently: `yarn start`
+5. Access the frontend at `http://localhost:3000` and backend at `http://localhost:8000`.
 

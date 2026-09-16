@@ -10,8 +10,7 @@ import { BookService } from '../../core/services/book.service';
 import { Book as BookModel, CreateBookDto, UpdateBookDto } from '../../core/models/book.model';
 import { BookFormDialogComponent } from './components/book-form-dialog.component';
 import { BookPreviewDialogComponent } from './components/book-preview-dialog.component';
-import { ClientConfirmDialogComponent } from '../client/components/client-confirm-dialog.component';
-import { BookConfirmDialogComponent } from './components/book-confirm-dialog.component'
+import { BookConfirmDialogComponent } from './components/book-confirm-dialog.component';
 
 @Component({
   selector: 'app-book',
@@ -38,13 +37,21 @@ import { BookConfirmDialogComponent } from './components/book-confirm-dialog.com
   templateUrl: './book.html',
 })
 export class Book implements OnInit {
-  displayedColumns: string[] = ['judul', 'penulis', 'tahunTerbit', 'isbn', 'stok', 'kategori', 'actions'];
+  displayedColumns: string[] = [
+    'judul',
+    'penulis',
+    'tahunTerbit',
+    'isbn',
+    'stok',
+    'kategori',
+    'actions',
+  ];
   dataSource = new MatTableDataSource<BookModel>([]);
   bookDetail: BookModel = {} as BookModel;
 
   constructor(
     private bookService: BookService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
   ) {}
 
   ngOnInit(): void {
@@ -60,7 +67,7 @@ export class Book implements OnInit {
   onCreate(): void {
     const dialogRef = this.dialog.open(BookFormDialogComponent, {
       width: '500px',
-      data: {}
+      data: {},
     });
 
     dialogRef.afterClosed().subscribe((result: CreateBookDto) => {
@@ -75,7 +82,7 @@ export class Book implements OnInit {
   onEdit = (book: BookModel) => {
     const dialogRef = this.dialog.open(BookFormDialogComponent, {
       width: '500px',
-      data: { book }
+      data: { book },
     });
 
     dialogRef.afterClosed().subscribe((result: UpdateBookDto) => {
@@ -85,7 +92,7 @@ export class Book implements OnInit {
         });
       }
     });
-  }
+  };
 
   onPreview = (book: BookModel) => {
     // fetch detailed book from backend then open preview dialog
@@ -95,7 +102,7 @@ export class Book implements OnInit {
         data: res,
       });
     });
-  }
+  };
 
   onRent = (book: BookModel) => {
     const dialogRef = this.dialog.open(BookConfirmDialogComponent, {
@@ -105,7 +112,7 @@ export class Book implements OnInit {
         message: `Are you sure you want to borrow "${book.judul}"?`,
         confirmLabel: 'Borrow',
         type: 'primary',
-      }
+      },
     });
 
     dialogRef.afterClosed().subscribe((confirmed: boolean) => {
@@ -115,15 +122,15 @@ export class Book implements OnInit {
         });
       }
     });
-  }
+  };
 
   onDelete = (book: BookModel) => {
     const dialogRef = this.dialog.open(BookConfirmDialogComponent, {
       width: '400px',
       data: {
         title: 'Delete Book',
-        message: `Are you sure you want to delete book "${book.judul}"?`
-      }
+        message: `Are you sure you want to delete book "${book.judul}"?`,
+      },
     });
 
     dialogRef.afterClosed().subscribe((confirmed: boolean) => {
@@ -133,5 +140,5 @@ export class Book implements OnInit {
         });
       }
     });
-  }
+  };
 }

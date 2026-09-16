@@ -7,7 +7,7 @@ Content-Type: application/json
   "penulis": "Robert C. Martin",
   "penerbit": "Prentice Hall",
   "tahunTerbit": 2008,
-  "isbn": "978-0132350999",
+  "isbn": "978-0132350988",
   "stok": 10,
   "kategori": "Programming"
 }
@@ -16,31 +16,31 @@ Content-Type: application/json
 GET http://localhost:8000/api/books
     ?judul=
     &kategori=
-    &page=2
-    &limit=1
+    &page=1
+    &limit=2
 
 ### GET detail of book by ID
-GET http://localhost:8000/api/books/107b75c7-2396-447f-ba2c-dfc9b7410ac6
+GET http://localhost:8000/api/books/f83bf9dc-c316-4755-9a1c-d0a8e979cfa1
 
 ### UPDATE book by ID
-PUT http://localhost:8000/api/books/78e7142c-56ff-4549-8046-4bc6a9989710
+PUT http://localhost:8000/api/books/f83bf9dc-c316-4755-9a1c-d0a8e979cfa1
 Content-Type: application/json
 
 {
-  "judul": "Clean Code 100",
+  "judul": "Clean Code",
   "penulis": "Robert C. Martin",
   "penerbit": "Prentice Hall",
   "tahunTerbit": 2008,
-  "isbn": "978-01323508100",
+  "isbn": "978-0132350999",
   "stok": 10,
   "kategori": "Programming 001"
 }
 
 ### DELETE book by ID
-DELETE http://localhost:8000/api/books/78e7142c-56ff-4549-8046-4bc6a99897a5
+DELETE http://localhost:8000/api/books/f83bf9dc-c316-4755-9a1c-d0a8e979cfa1
 
 ### Borrow book by ID
-POST http://localhost:8000/api/books/107b75c7-2396-447f-ba2c-dfc9b7410ac6/borrow
+POST http://localhost:8000/api/books/f83bf9dc-c316-4755-9a1c-d0a8e979cfa1/borrow
 Content-Type: application/json
 
 {
