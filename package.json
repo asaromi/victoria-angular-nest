@@ -6,7 +6,7 @@
   "author": "asaromi",
   "scripts": {
     "start:frontend": "yarn workspace frontend-angular start",
-    "start:api": "yarn workspace api-nest start",
+    "start:api": "yarn workspace api-nest start:dev",
     "start": "yarn start:frontend & yarn start:api"
   },
   "license": "ISC",

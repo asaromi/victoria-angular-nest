@@ -1,7 +1,7 @@
 # License & Book Management System
 
-This project is an implemented License and Book Management System using NestJS (Node.js) and Angular, with PostgreSQL as the database and Prisma as the ORM.
-The project is designed to manage clients, books, products, and licenses with a RESTful API and a modern web interface.
+This project is an implemented Book Management CRUD using NestJS (Node.js) and Angular, with PostgreSQL as the database and Prisma as the ORM.
+The project is designed to manage books with a RESTful API and a modern web interface.
 
 ## Tech Stack
 
@@ -16,18 +16,19 @@ The project is designed to manage clients, books, products, and licenses with a 
 api-nest/
 ├── src/
 │   ├── books/          # Book module (CRUD, Search, Borrow logic)
-│   ├── client/         # Client module
-│   ├── product/        # Product module
-│   ├── product-plan/   # Product Plan module
-│   ├── license/        # License module
+│   ├── other-module/   # Other modules (if any)
 │   └── common/         # Shared filters, DTOs, and Prisma service
 ├── prisma/             # Schema and migrations
 └── test/               # E2E tests (not used yet)
 frontend-angular/
 ├── src/app/
-│   ├── features/       # Feature modules (Book, Client, etc.)
+│   ├── features/       # Feature modules (Book, etc.)
+|   |   └── books/      # Book module (CRUD, Search, Borrow logic)
 │   ├── core/           # Core services and models
 │   └── shared/         # Shared components (Header, etc.)
+shared/
+├── utils/              # Shared utilities (DTOs, constants, etc.)
+└── other-shared/       # Other shared resources
 ```
 
 ## Project Limitation
@@ -220,26 +221,29 @@ frontend-angular/
 ```
 
 ## Setup & Installation
-
 ### Setup Requirement
-
 - Node.js >= 22
 - PostgreSQL service running
 - Prisma CLI
 
 ### Backend Setup (api-nest)
-
 1. Navigate to `api-nest` directory.
-2. Install dependencies: `npm install`
+2. Install dependencies: `npm --dev`
 3. Copy `.env.example` to `.env` and update `DATABASE_URL`.
 4. Run migrations/sync database: `npx prisma db push`
 5. Generate Prisma Client: `npx prisma generate`
-6. Start the server: `npm run start:dev`
+6. Start the server: `yarn start:dev`
+7. Default backend runs on `http://localhost:8000`.
 
 ### Frontend Setup (frontend-angular)
-
 1. Navigate to `frontend-angular` directory.
-2. Install dependencies: `npm install`
-3. Start the development server: `npm run start`
-4. Access the app at `http://localhost:4200` (Backend runs on `http://localhost:8000`).
+2. Install dependencies: `yarn --dev`
+3. Start the development server: `yarn start`
+4. Access the app at `http://localhost:3000` (Backend runs on `http://localhost:8000`).
+
+### Directly run both Frontend and Backend
+1. Navigate to the root directory of the project.
+2. Run `yarn --dev` to install all package both `frontend-angular` and `api-nest`
+3. Run both servers concurrently: `yarn start`
+4. Access the frontend at `http://localhost:3000` and backend at `http://localhost:8000`.
 
